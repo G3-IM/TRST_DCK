@@ -28,11 +28,41 @@
 <body>
 
 <model-viewer
+  id="viewer"
   src="TRST_DCK_EXI_ARC_000.glb"
   camera-controls
   interaction-prompt="none"
 >
 </model-viewer>
+
+<script>
+const viewer = document.querySelector('#viewer');
+
+viewer.addEventListener('load', async () => {
+  const model = viewer.model;
+
+  // attendi che il modello sia completamente caricato
+  await model.waitForLoaded();
+
+  // Otteniamo il bounding box per dimensioni reali
+  const bbox = model.boundingBox;
+  const size = Math.max(
+    bbox.max.x - bbox.min.x,
+    bbox.max.y - bbox.min.y,
+    bbox.max.z - bbox.min.z
+  );
+
+  // Impostiamo distanza iniziale e limiti zoom
+  const initialRadius = size * 2;   // distanza iniziale della camera
+  const minRadius = size * 0.05;    // zoom massimo vicino
+  const maxRadius = size * 50;      // zoom massimo lontano
+
+  viewer.cameraOrbit = `0deg 75deg ${initialRadius}m`;
+  viewer.minCameraOrbit = `auto auto ${minRadius}m`;
+  viewer.maxCameraOrbit = `auto auto ${maxRadius}m`;
+  viewer.jumpCameraToGoal();
+});
+</script>
 
 </body>
 </html>
