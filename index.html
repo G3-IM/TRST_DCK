@@ -28,47 +28,11 @@
 <body>
 
 <model-viewer
-  id="viewer"
   src="TRST_DCK_EXI_ARC_000.glb"
   camera-controls
   interaction-prompt="none"
-  camera-orbit="0deg 75deg 2m"
-  min-camera-orbit="auto auto 0.2m"
-  max-camera-orbit="auto auto 50m"
 >
 </model-viewer>
-
-<script>
-const viewer = document.querySelector('#viewer');
-
-viewer.addEventListener('load', async () => {
-  const model = viewer.model;
-
-  // attendi che il modello sia completamente pronto
-  await model.waitForLoaded();
-
-  // Scala il modello: da cm a m (0.01) e ingrandisci 4 volte
-  const scaleFactor = 0.01 * 4; // 4 volte più grande
-  model.scale.set(scaleFactor, scaleFactor, scaleFactor);
-
-  // Ricalcola il bounding box per adattare la camera
-  const bbox = model.boundingBox;
-  const size = Math.max(
-    bbox.max.x - bbox.min.x,
-    bbox.max.y - bbox.min.y,
-    bbox.max.z - bbox.min.z
-  );
-
-  const radius = size * 2;       // distanza iniziale
-  const minRadius = size * 0.1;  // zoom massimo vicino
-  const maxRadius = size * 50;   // distanza massima
-
-  viewer.cameraOrbit = `0deg 75deg ${radius}m`;
-  viewer.minCameraOrbit = `auto auto ${minRadius}m`;
-  viewer.maxCameraOrbit = `auto auto ${maxRadius}m`;
-  viewer.jumpCameraToGoal();
-});
-</script>
 
 </body>
 </html>
