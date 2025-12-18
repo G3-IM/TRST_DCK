@@ -15,14 +15,17 @@
       margin: 0;
       width: 100%;
       height: 100%;
-      background: #f2f2f2; /* sfondo chiaro */
+      background: #f2f2f2; /* sfondo sito chiaro */
       overflow: hidden;
     }
 
     model-viewer {
       width: 100%;
       height: 100%;
-      background-color: #f2f2f2;
+      background-color: #f2f2f2 !important;
+
+      /* forza il colore del canvas */
+      --poster-color: #f2f2f2;
     }
 
     #progress {
@@ -55,6 +58,7 @@
 
   /* ILLUMINAZIONE */
   environment-image="neutral"
+  skybox-image="none"
   exposure="1.15"
   tone-mapping="aces"
   shadow-intensity="0.5"
@@ -90,23 +94,3 @@ viewer.addEventListener('mousedown', e => {
 });
 
 window.addEventListener('mouseup', () => {
-  isDragging = false;
-});
-
-window.addEventListener('mousemove', e => {
-  if (!isDragging) return;
-  rotateModel(e.clientX);
-});
-
-/* Touch */
-viewer.addEventListener('touchstart', e => {
-  isDragging = true;
-  lastX = e.touches[0].clientX;
-});
-
-viewer.addEventListener('touchend', () => {
-  isDragging = false;
-});
-
-viewer.addEventListener('touchmove', e => {
-  i
