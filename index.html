@@ -14,7 +14,7 @@
       margin: 0;
       width: 100%;
       height: 100%;
-      background: #cccccc;
+      background: #cccccc; /* sfondo grigio chiaro */
     }
 
     model-viewer {
@@ -47,10 +47,11 @@ viewer.addEventListener('load', async () => {
   // attendi che il modello sia completamente pronto
   await model.waitForLoaded();
 
-  // scala il modello 4 volte
-  model.scale.set(4, 4, 4);
+  // Scala il modello: da cm a m (0.01) e ingrandisci 4 volte
+  const scaleFactor = 0.01 * 4; // 4 volte più grande
+  model.scale.set(scaleFactor, scaleFactor, scaleFactor);
 
-  // centra e regola la camera in base alla nuova scala
+  // Ricalcola il bounding box per adattare la camera
   const bbox = model.boundingBox;
   const size = Math.max(
     bbox.max.x - bbox.min.x,
@@ -58,9 +59,9 @@ viewer.addEventListener('load', async () => {
     bbox.max.z - bbox.min.z
   );
 
-  const radius = size * 2;      // distanza iniziale
-  const minRadius = size * 0.1; // zoom massimo vicino
-  const maxRadius = size * 50;  // distanza massima
+  const radius = size * 2;       // distanza iniziale
+  const minRadius = size * 0.1;  // zoom massimo vicino
+  const maxRadius = size * 50;   // distanza massima
 
   viewer.cameraOrbit = `0deg 75deg ${radius}m`;
   viewer.minCameraOrbit = `auto auto ${minRadius}m`;
