@@ -14,7 +14,7 @@
       margin: 0;
       width: 100%;
       height: 100%;
-      background: #000000; /* sfondo nero */
+      background: #000000;
     }
 
     model-viewer {
@@ -46,20 +46,25 @@
 <script>
 const viewer = document.querySelector('#viewer');
 
-// Adatta automaticamente la camera alla dimensione del modello
-viewer.addEventListener('load', () => {
-  // ottieni dimensione del bounding box
-  const bbox = viewer.model.getBoundingBox();
+// Attendiamo che il modello sia completamente caricato
+viewer.addEventListener('load', async () => {
+  const model = viewer.model;
+
+  // Usa waitForLoaded per sicurezza
+  await model.waitForLoaded();
+
+  // Otteniamo il bounding box reale
+  const bbox = model.boundingBox;
   const size = Math.max(
     bbox.max.x - bbox.min.x,
     bbox.max.y - bbox.min.y,
     bbox.max.z - bbox.min.z
   );
 
-  // imposta distanza iniziale e zoom massimo proporzionali alla dimensione
-  const radius = size * 1.5;   // distanza iniziale
-  const minRadius = size * 0.2; // zoom massimo vicino
-  const maxRadius = size * 10;  // distanza massima
+  // Distanze proporzionali al modello
+  const radius = size * 2;       // distanza iniziale
+  const minRadius = size * 0.1;  // zoom massimo vicino
+  const maxRadius = size * 10;   // distanza massima
 
   viewer.cameraOrbit = `0deg 75deg ${radius}m`;
   viewer.minCameraOrbit = `auto auto ${minRadius}m`;
