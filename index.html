@@ -14,14 +14,14 @@
       margin: 0;
       width: 100%;
       height: 100%;
-      background: #000000;
+      background: #cccccc; /* sfondo grigio chiaro */
     }
 
     model-viewer {
       width: 100%;
       height: 100%;
-      background-color: #000000;
-      --poster-color: #000000;
+      background-color: #cccccc; /* sfondo del canvas grigio */
+      --poster-color: #cccccc;    /* evita flash bianco all’avvio */
     }
   </style>
 </head>
@@ -46,11 +46,10 @@
 <script>
 const viewer = document.querySelector('#viewer');
 
-// Attendiamo che il modello sia completamente caricato
 viewer.addEventListener('load', async () => {
   const model = viewer.model;
 
-  // Usa waitForLoaded per sicurezza
+  // Assicuriamoci che il modello sia completamente caricato
   await model.waitForLoaded();
 
   // Otteniamo il bounding box reale
