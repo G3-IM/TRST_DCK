@@ -3,64 +3,62 @@
 <head>
   <meta charset="utf-8">
   <title>Modello 3D</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <script type="module"
     src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js">
   </script>
 
   <style>
-    html, body {
+    body {
       margin: 0;
-      width: 100%;
-      height: 100%;
-      background: #cccccc; /* sfondo grigio chiaro */
+      background: #000000; /* sfondo nero */
+      overflow: hidden;
     }
-
     model-viewer {
-      width: 100%;
-      height: 100%;
-      background-color: #cccccc;
+      width: 100vw;
+      height: 100vh;
+      background-color: #000000; /* sfondo nero anche per il modello */
     }
   </style>
 </head>
-
 <body>
 
 <model-viewer
   id="viewer"
   src="TRST_DCK_EXI_ARC_000.glb"
   camera-controls
+  disable-zoom="false"
+  auto-rotate="false"
   interaction-prompt="none"
->
-</model-viewer>
+></model-viewer>
 
 <script>
 const viewer = document.querySelector('#viewer');
 
-viewer.addEventListener('load', async () => {
-  const model = viewer.model;
+let isDragging = false;
+let lastX = 0;
 
-  // attendi che il modello sia completamente caricato
-  await model.waitForLoaded();
+viewer.addEventListener('mousedown', e => {
+  isDragging = true;
+  lastX = e.clientX;
+});
 
-  // Otteniamo il bounding box per dimensioni reali
-  const bbox = model.boundingBox;
-  const size = Math.max(
-    bbox.max.x - bbox.min.x,
-    bbox.max.y - bbox.min.y,
-    bbox.max.z - bbox.min.z
-  );
+window.addEventListener('mouseup', () => {
+  isDragging = false;
+});
 
-  // Impostiamo distanza iniziale e limiti zoom
-  const initialRadius = size * 2;   // distanza iniziale della camera
-  const minRadius = size * 0.05;    // zoom massimo vicino
-  const maxRadius = size * 50;      // zoom massimo lontano
+window.addEventListener('mousemove', e => {
+  if (!isDragging) return;
 
-  viewer.cameraOrbit = `0deg 75deg ${initialRadius}m`;
-  viewer.minCameraOrbit = `auto auto ${minRadius}m`;
-  viewer.maxCameraOrbit = `auto auto ${maxRadius}m`;
+  const dx = e.clientX - lastX;
+
+  // Ruotare solo sull'asse verticale (yaw)
+  let [yaw, pitch, radius] = viewer.getCameraOrbit().split(' ');
+  yaw = parseFloat(yaw.replace('deg','')) - dx * 0.2; // sensibilità
+  viewer.cameraOrbit = `${yaw}deg ${pitch} ${radius}`;
   viewer.jumpCameraToGoal();
+
+  lastX = e.clientX;
 });
 </script>
 
