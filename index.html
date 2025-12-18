@@ -15,14 +15,14 @@
       margin: 0;
       width: 100%;
       height: 100%;
-      background: #000;
+      background: #f2f2f2; /* sfondo chiaro */
       overflow: hidden;
     }
 
     model-viewer {
       width: 100%;
       height: 100%;
-      background-color: #000;
+      background-color: #f2f2f2;
     }
 
     #progress {
@@ -32,13 +32,13 @@
       transform: translateX(-50%);
       width: 200px;
       height: 6px;
-      background: #333;
+      background: #ccc;
     }
 
     #progress div {
       height: 100%;
       width: 0%;
-      background: #fff;
+      background: #333;
       transition: width 0.2s;
     }
   </style>
@@ -48,22 +48,20 @@
 
 <model-viewer
   id="viewer"
-  src="TRST_DCK_EXI_ARC_000_original.glb"
+  src="./TRST_DCK_EXI_ARC_000.glb"
 
   camera-controls
   interaction-prompt="none"
 
   /* ILLUMINAZIONE */
   environment-image="neutral"
-  exposure="1.25"
-  shadow-intensity="0.6"
-  shadow-softness="0.8"
+  exposure="1.15"
   tone-mapping="aces"
+  shadow-intensity="0.5"
+  shadow-softness="0.8"
 
-  /* QUALITÀ */
   loading="eager"
   reveal="auto"
-
 >
 </model-viewer>
 
@@ -111,25 +109,4 @@ viewer.addEventListener('touchend', () => {
 });
 
 viewer.addEventListener('touchmove', e => {
-  if (!isDragging) return;
-  rotateModel(e.touches[0].clientX);
-});
-
-/* Rotazione solo asse Y */
-function rotateModel(currentX) {
-  const dx = currentX - lastX;
-  let orbit = viewer.getCameraOrbit();
-  let yaw = orbit.theta * (180 / Math.PI);
-  let pitch = orbit.phi * (180 / Math.PI);
-  let radius = orbit.radius;
-
-  yaw -= dx * 0.2;
-  viewer.cameraOrbit = `${yaw}deg ${pitch}deg ${radius}`;
-  viewer.jumpCameraToGoal();
-
-  lastX = currentX;
-}
-</script>
-
-</body>
-</html>
+  i
